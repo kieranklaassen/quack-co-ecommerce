@@ -171,23 +171,7 @@ export function PaymentForm() {
     };
 
     try {
-      const nextDraft = {
-        shipping: draft.shipping,
-        billing,
-        sameAsShipping: values.sameAsShipping,
-        cardBrand: brand,
-        last4,
-      };
-      localStorage.setItem(
-        "quack-checkout-v1",
-        JSON.stringify({
-          state: {
-            draft: nextDraft,
-            lastOrder: order,
-          },
-          version: 0,
-        }),
-      );
+      setLastOrder(order);
       setSameAsShipping(values.sameAsShipping);
       setBilling(billing);
       setPaymentMeta({
@@ -195,7 +179,6 @@ export function PaymentForm() {
         last4,
         cardholderName: values.cardholderName,
       });
-      setLastOrder(order);
     } catch {
       setPending(false);
       return;
