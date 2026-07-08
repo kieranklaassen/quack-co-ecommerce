@@ -4,7 +4,6 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { CartLine, CustomCartLine, ProductCartLine } from "@/types/cart";
 import type { Customization } from "@/types/customizer";
-import { cartTotals } from "@/lib/money";
 
 function newLineId(): string {
   return `line_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
@@ -24,12 +23,11 @@ interface CartState {
   setQty: (lineId: string, quantity: number) => void;
   removeLine: (lineId: string) => void;
   clearCart: () => void;
-  itemCount: () => number;
 }
 
 export const useCartStore = create<CartState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       lines: [],
       hasHydrated: false,
       setHasHydrated: (value) => set({ hasHydrated: value }),
@@ -96,7 +94,6 @@ export const useCartStore = create<CartState>()(
         }));
       },
       clearCart: () => set({ lines: [] }),
-      itemCount: () => cartTotals(get().lines).itemCount,
     }),
     {
       name: "quack-cart-v1",

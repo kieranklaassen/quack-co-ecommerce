@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 
 export function ConfirmationView() {
   const router = useRouter();
+  const lines = useCartStore((s) => s.lines);
   const lastOrder = useCheckoutStore((s) => s.lastOrder);
   const checkoutHydrated = useCheckoutStore((s) => s.hasHydrated);
   const clearCart = useCartStore((s) => s.clearCart);
@@ -25,9 +26,17 @@ export function ConfirmationView() {
     }
     if (cleared.current) return;
     cleared.current = true;
-    clearCart();
-    clearDraft();
-  }, [checkoutHydrated, lastOrder, router, clearCart, clearDraft]);
+    const cartMatchesOrder =
+      lines.length === lastOrder.items.length &&
+      lastOrder.items.every((item) => {
+        const line = lines.find((l) => l.lineId === item.lineId);
+        return line?.quantity === item.quantity;
+      });
+    if (cartMatchesOrder) {
+      clearCart();
+      clearDraft();
+    }
+  }, [checkoutHydrated, lastOrder, lines, router, clearCart, clearDraft]);
 
   if (!checkoutHydrated || !lastOrder) {
     return (
