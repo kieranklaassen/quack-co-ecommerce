@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type { Customization } from "@/types/customizer";
 import {
+  ENGRAVING_CENTS,
   MAX_ENGRAVING_LENGTH,
   accessoryCategories,
   baseColors,
@@ -164,7 +165,7 @@ export function CustomizerShell() {
           <p className="text-xs text-muted-foreground">
             {customization.engraving.length}/{MAX_ENGRAVING_LENGTH}
             {customization.engraving.trim()
-              ? ` · +${formatMoney(800)} engraving`
+              ? ` · +${formatMoney(ENGRAVING_CENTS)} engraving`
               : ""}
           </p>
         </section>
